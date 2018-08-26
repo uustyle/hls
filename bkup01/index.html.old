@@ -1,0 +1,58 @@
+<!DOCTYPE html>  
+
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Video Test | akiyoko blog</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+        function load(id, index) {
+
+        if(Hls.isSupported()) {
+          var video = document.getElementById(id);
+          var hls = new Hls();
+          hls.loadSource('./tmp' + index + "/index.m3u8");
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED,function() {
+            //video.play();
+        });
+       } else {
+alert("read error");
+        }
+
+        }
+
+        // DOMの読み込みが全て完了したら
+        $(document).ready(
+            function() {
+
+
+
+            }
+        );
+    </script
+
+
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<div>  
+  <h2>HTTP Live Streaming</h2>
+  <video id="id1" width=640 height=360 controls></video>
+  <video id="id2" width=640 height=360 controls></video>
+  <video id="id3" width=640 height=360 controls></video>
+  <video id="id4" width=640 height=360 controls></video>
+  <video id="id5" width=640 height=360 controls></video>
+  <video id="id6" width=640 height=360 controls></video>
+  <video id="id7" width=640 height=360 controls></video>
+  <video id="id8" width=640 height=360 controls></video>
+  <video id="id9" width=640 height=360 controls></video>
+  <video id="id10" width=640 height=360 controls></video>
+</div>  
+
+
+
+

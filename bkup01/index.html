@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Video Test | akiyoko blog</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+
+
+        var players = [];
+
+        function load(id, index) {
+
+            if (Hls.isSupported()) {
+                var video = document.getElementById(id);
+                var hls = new Hls({
+                   maxBufferLength: 1,
+//                   maxMaxBufferLength: 1,
+//                   maxBufferSize: 1
+                });
+                players.push(hls);
+                hls.loadSource('./tmp' + index + "/index.m3u8");
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    //video.play();
+                });
+            } else {
+                alert("read error");
+            }
+
+        }
+
+        // DOMの読み込みが全て完了したら
+        $(document).ready(
+            function () {
+
+              $('#button').click(function() {
+
+                for (  var i = 1;  i < 11;  i++  ) {
+                
+                  load("id" + i, i);
+                
+                }
+
+              });
+
+
+              $('#detach').click(function() {
+
+                for (  var i = 0;  i < players.length;  i++  ) {
+
+                  players[i].detachMedia();
+
+                }
+
+              });
+
+
+              $('#destroy').click(function() {
+
+                for (  var i = 0;  i < players.length;  i++  ) {
+
+                  players[i].destroy();
+
+                }
+
+              });
+
+
+              $('#play').click(function() {
+
+                for (  var i = 0;  i < players.length;  i++  ) {
+
+console.log("media",players[i].media);
+                  players[i].media.play();
+
+                }
+
+              });
+
+
+              $('#poster').click(function() {
+
+                for (  var i = 0;  i < players.length;  i++  ) {
+
+                  $(players[i].media).attr("poster", "blue.jpg");
+
+                }
+
+              });
+
+
+
+            }
+        );
+
+
+    </script>
+
+
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
+</script>
+
+    <div>
+        <h2>HTTP Live Streaming</h2>
+<!--
+        <video id="id1" width=640 height=360 controls></video>
+        <video id="id2" width=640 height=360 controls></video>
+        <video id="id3" width=640 height=360 controls></video>
+        <video id="id4" width=640 height=360 controls></video>
+        <video id="id5" width=640 height=360 controls></video>
+        <video id="id6" width=640 height=360 controls></video>
+        <video id="id7" width=640 height=360 controls></video>
+        <video id="id8" width=640 height=360 controls></video>
+        <video id="id9" width=640 height=360 controls></video>
+        <video id="id10" width=640 height=360 controls></video>
+-->
+
+        <video id="id1" width=200 height=200 controls preload="none"></video>
+        <video id="id2" width=200 height=200 controls preload="none"></video>
+        <video id="id3" width=200 height=200 controls preload="none"></video>
+        <video id="id4" width=200 height=200 controls preload="none"></video>
+        <video id="id5" width=200 height=200 controls preload="none"></video>
+        <video id="id6" width=200 height=200 controls preload="none"></video>
+        <video id="id7" width=200 height=200 controls preload="none"></video>
+        <video id="id8" width=200 height=200 controls preload="none"></video>
+        <video id="id9" width=200 height=200 controls preload="none"></video>
+        <video id="id10" width=200 height=200 controls preload="none"></video>
+    </div>
+
+    <button id="button">loadボタン</button>
+    <button id="detach">detachボタン</button>
+    <button id="destroy">destroyボタン</button>
+    <button id="poster">posterボタン</button>
+    <button id="play">playボタン</button>
+
+
+</body>
+</html>
+
+
