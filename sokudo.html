@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Video Test | akiyoko blog</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script>
+
+        var players = [];
+
+        function speed() {
+
+            var speed = document.getElementById("speed").value;
+            var video = document.getElementById("id1");
+
+            try {
+                video.playbackRate = speed;
+            } catch (error) {
+                console.log("err:", error);
+            }
+
+        }
+
+        function load(id, index) {
+
+            if (Hls.isSupported()) {
+                var video = document.getElementById(id);
+                var hls = new Hls({
+                    debug: true,
+                    maxBufferLength: 600,
+                    maxMaxBufferLength: 6000,
+                                    //   maxBufferSize: 6000,
+
+
+                    // manifestLoadingTimeOut: 10000,
+                    // manifestLoadingMaxRetry: 6,
+                    // manifestLoadingRetryDelay: 500,
+                    // manifestLoadingMaxRetryTimeout: 64000,
+
+                });
+                players.push(hls);
+                hls.loadSource("./tmp3/hls/index.m3u8");
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                // try to recover network error
+                                console.log("fatal network error encountered, try to recover");
+                                // hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.log("fatal media error encountered, try to recover");
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                // cannot recover
+                                hls.destroy();
+                                break;
+                        }
+                    }
+                });
+
+            } else {
+                alert("read error");
+            }
+
+        }
+
+        // DOMの読み込みが全て完了したら
+        $(document).ready(
+            function () {
+
+                $('#button').click(function () {
+
+                    load("id1", 1);
+
+                });
+
+                $('#speedset').click(function () {
+
+                    speed();
+
+                });
+
+
+
+                $('#detach').click(function () {
+
+                    for (var i = 0; i < players.length; i++) {
+
+                        players[i].detachMedia();
+
+                    }
+
+                });
+
+
+                $('#destroy').click(function () {
+
+                    for (var i = 0; i < players.length; i++) {
+
+                        players[i].destroy();
+
+                    }
+
+                });
+
+
+                $('#play').click(function () {
+
+                    for (var i = 0; i < players.length; i++) {
+
+                        console.log("media", players[i].media);
+                        players[i].media.play();
+
+                    }
+
+                });
+
+
+                $('#poster').click(function () {
+
+                    for (var i = 0; i < players.length; i++) {
+
+                        $(players[i].media).attr("poster", "blue.jpg");
+
+                    }
+
+                });
+
+
+
+            }
+        );
+
+
+    </script>
+
+
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
+    </script>
+
+    <div>
+        <h2>HTTP Live Streaming</h2>
+
+        <input type="text" id="speed" name="speed" size="40" maxlength="20">
+
+        <video id="id1" width=800 height=800 controls preload="none"></video>
+    </div>
+
+    <button id="button">loadボタン</button>
+    <button id="speedset">speedsetボタン</button>
+
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Video Test | akiyoko blog</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+
+    <script type="text/javascript" src="./test1.js?2"></script>
+</head>
+
+<script type="text/x-handlebars-template" id="template">
+        <h1>{{name}}</h1>
+        <div>{{age}}</div>
+        <button id="btn">ボタン</button>
+        <video src="./index.m3u8" width="400" height="300" id="video" controls></video>
+  </script>
+<script>
+
+    // DOMの読み込みが全て完了したら
+    $(document).ready(function () {
+
+        $('#init').click(function () {
+
+            templateLoad();
+            $(document).trigger('init');
+
+        });
+
+        $('#show').click(function () {
+
+            // templateLoad();
+            $(document).trigger('show');
+
+        });
+
+
+
+
+        templateLoad();
+        $(document).trigger('init');
+
+    });
+
+
+    function templateLoad() {
+
+        var source = $("#template").html();
+        var template = Handlebars.compile(source);
+        var values = {
+            name: "Satoshi Watanabe",
+            age: 33
+        };
+        var html = template(values);
+        console.log(html);
+        $("#contents").html(html);
+
+    }
+
+
+</script>
+
+<body>
+
+
+    <div id="contents">
+    </div>
+
+
+    <button id="init">initボタン</button>
+    <button id="show">showボタン</button>
+
+
+</body>
+
+</html>
